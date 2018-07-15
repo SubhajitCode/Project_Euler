@@ -25,21 +25,22 @@ void combine(int *clayer,int *layer,int w,int h,int level)
         {
             for(j=0;j<w;j++)
             {
-           //printf("%d ", *(clayer+(i*w)+j));
+          // printf("%d ", *(clayer+(i*w)+j));
             }
            //printf("\n");
 
         }
-        p++;
-        printf("%d \n",p);
+        // p++;
+        //printf("%d \n",p);
         c = checkcrack(clayer,w,h);
         if(c==1)
         {
-            //printf("\n--------------------cracked wall found --------------- \n");
+           // printf("\n--------------------cracked wall found --------------- \n");
         }
         else
         {
-            printf("\n------no crackk------ \n");
+           // printf("\n------no crackk------ \n");
+            p++;
         }
         return;
     }
@@ -62,15 +63,18 @@ int checkcrack(int *clayer,int w,int h)
     for(i=1;i<(w-1);i++)
     {
         int wall =0;
-        for(j=0;j<h;j++)
+        for(j=0;j<(h-1);j++)
         {
-            wall = wall|(*(clayer+(j*w)+i));
+            wall = (*(clayer+(j*w)+i))+(*(clayer+((j+1)*w)+i));
+            if(wall > 1)
+            {
+                return 1;
+            }
         }
-        if(wall != 0)
-        {
-            printf("wall = %d \n",wall);
-            return 1;
-        }
+        // printf("wall = %d \n",wall);
+
+        
+            
     }
     return 0;
 
@@ -137,10 +141,10 @@ void print_layer(int *layer,int w,int k)
     int i;
       for(i=0;i<(w);i++)
         {
-            printf("%d " ,*(layer+k*(w)+i));
+           // printf("%d " ,*(layer+k*(w)+i));
         }
         
-        printf("\n");
+       // printf("\n");
 }
 
 void print_array(int *array,int size)
@@ -148,10 +152,10 @@ void print_array(int *array,int size)
     int i;
     for(i=0;i<size;i++)
     {
-        printf("%d ",*(array+i));
+       // printf("%d ",*(array+i));
     }
-    printf("---- %d",g);
-    printf("\n");
+   // printf("---- %d",g);
+  //  printf("\n");
 }
 
 void create_array(int *a,int *b,int *layer,int j,int w)
@@ -205,7 +209,7 @@ int main()
     for (i=0;i<j; i++)
 
     {
-       printf("%d  %d  \n",a[i],b[i]);
+      // printf("%d  %d  \n",a[i],b[i]);
     }
     unsigned long layer_size=0;
     for (i=0;i<j; i++)
@@ -213,7 +217,7 @@ int main()
     {
        layer_size = layer_size + (fact(a[i]+b[i])/(fact(a[i])*fact(b[i])));
     }
-    printf("%d    \n",layer_size);
+   // printf("%d    \n",layer_size);
     int layer[layer_size][(w+1)];
      memset( layer, sizeof( layer ), 0 );
     constuct_layers(&a,&b,&layer,j,w);
@@ -227,6 +231,7 @@ int main()
   // print_layer(&layer,(w+1),2);
   int clayer[h][w+1];
   combine(&clayer,&layer,(w+1),h,0);
+  printf("%d \n",p);
 
 
     return 0;
