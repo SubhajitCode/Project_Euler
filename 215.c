@@ -6,13 +6,6 @@
 #include <stdlib.h>
 unsigned long g=0;
 int p=0;
-void swap(int* a, int* b)
-{
-    int t = *a;
-    *a = *b;
-    *b = t;
-}
-
 
 void combine(int *clayer,int *layer,int w,int h,int level)
 {
