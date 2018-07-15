@@ -14,47 +14,46 @@ void swap(int* a, int* b)
 }
 
 
-void combine(int *layer,int w,int h)
+void combine(int *clayer,int *layer,int w,int h,int level)
 {
-    int clayer[h][w];
+    
     int i,j,k;
     int c=0;
-    for(k=0;k<g;k++)
+    if(level==h)
     {
         for(i=0;i<h;i++)
         {
-        
             for(j=0;j<w;j++)
             {
-                clayer[i][j]= *(layer+(k*w)+j);
+           //printf("%d ", *(clayer+(i*w)+j));
             }
+           //printf("\n");
 
         }
-            printf("\n \n printing combination \n \n");
-        for(i=0;i<h;i++)
-        {
-            for(j=0;j<w;j++)
-            {
-            printf("%d ", clayer[i][j]);
-            }
-            printf("\n");
-
-        }
-        c = checkcrack(&clayer,w,h);
+        p++;
+        printf("%d \n",p);
+        c = checkcrack(clayer,w,h);
         if(c==1)
         {
-            printf("\n--------------------cracked wall found --------------- \n");
+            //printf("\n--------------------cracked wall found --------------- \n");
         }
         else
         {
             printf("\n------no crackk------ \n");
         }
+        return;
     }
+    for(i=0;i<g;i++)
+    {
+        for(j=0;j<w;j++)
+        {
+           *(clayer+(level*w)+j)= *(layer+(i*w)+j);
+        }
+        combine(clayer,layer,w,h,level+1);      
+    }
+    
 }
-void combine_util()
-{
 
-}
 
 int checkcrack(int *clayer,int w,int h)
 {
@@ -69,6 +68,7 @@ int checkcrack(int *clayer,int w,int h)
         }
         if(wall != 0)
         {
+            printf("wall = %d \n",wall);
             return 1;
         }
     }
@@ -225,7 +225,8 @@ int main()
        print_layer(&layer,(w+1),k);
      }
   // print_layer(&layer,(w+1),2);
-  combine(&layer,(w+1),h);
+  int clayer[h][w+1];
+  combine(&clayer,&layer,(w+1),h,0);
 
 
     return 0;
