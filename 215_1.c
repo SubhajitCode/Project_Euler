@@ -43,6 +43,7 @@ void combine(int *clayer,int *layer,int w,int h,int level)
         {
            *(clayer+(level*w)+j)= *(layer+(i*w)+j);
         }
+        printf("%d",i);
         combine(clayer,layer,w,h,level+1);      
     }
     
@@ -74,78 +75,26 @@ int checkcrack(int *clayer,int w,int h)
 
 }
 
-void permute(int *clayer,int *blocks,int *count,int *count2,int size,int *array,int level,int level2,int *layer,int w,int h)
+void permute(int *blocks,int *count,int size,int *array,int level,int *layer,int w)
 {
-    int j;
-    int i;
-    if(level2==h)
-    {
-        for(i=0;i<h;i++)
-        {
-            for(j=0;j<w;j++)
-            {
-          printf("%d ", *(clayer+(i*w)+j));
-            }
-        printf("\n");
-
-        }
-         p++;
-        printf("%d \n",p);
-        int c=0;
-        c = checkcrack(clayer,w,h);
-        if(c==1)
-        {
-            printf("\n--------------------cracked wall found --------------- \n");
-        }
-        else
-        {
-            printf("\n------no crackk------ \n");
-            //p++;
-        }
-        return;
-    }
     if (level == size) 
         {
-            //print_array(array,size);
-           // create_layer_from_array(array,size,layer,g,w);
-           
-
-            int k=0;
-            for(j=0;j<w;j++)
-            {
-                *(layer+(g*w)+j)=0;
-            }
-            *(layer+(g*w))=1;
-            for(i=0;i<size;i++)
-            {
-                k=k+*(array+i) ;
-                // *(array+i)       
-                *(layer+k+(g*w))=1;
-            }
-
-            for(j=0;j<w;j++)
-            {
-                *(clayer+(level2*w)+j)= *(layer+(g*w)+j);
-
-            }
-            
-             permute(clayer,blocks, count,count2, size,array, level,level2+1,layer,w,h);
-              g++;
-            //combine(clayer,layer,w,h,level+1);  
+            print_array(array,size);
+            create_layer_from_array(array,size,layer,g,w);
+            g++;
             return;
-
         }
-    for(int i = 0; i <2 ; i++)
-     {
+    int i;
+    for(int i = 0; i <2 ; i++) {
             if(*(count+i) == 0) 
             {
                 continue;
             }
             *(array+level) = *(blocks+i);
             (*(count+i))--;
-            permute(clayer,blocks, count,count2, size,array, level + 1,level2,layer,w,h);
+            permute(blocks, count, size,array, level + 1,layer,w);
             (*(count+i))++;
-    }
+        }
 
 }
 void create_layer_from_array(int *array,int size,int *layer,int pos,int w)
@@ -203,14 +152,9 @@ void print_array(int *array,int size)
   //  printf("\n");
 }
 
-void create_array(int *clayer,int *a,int *b,int *layer,int j,int w,int h)
+void create_array(int *a,int *b,int *layer,int j,int w)
 {
     int i;
-    int count2[w];
-    for(i=0;i<w;i++)
-    {
-        count2[i]=h;
-    }
     for(i=0;i<j;i++)
     {
         int blocks[2]={3,2};
@@ -218,14 +162,14 @@ void create_array(int *clayer,int *a,int *b,int *layer,int j,int w,int h)
         int size=0;
         size = *(a+i)+*(b+i);
         int array[size];
-        permute(clayer,&blocks,&count,&count2,size,&array,0,0,layer,w,h);
+        permute(&blocks,&count,size,&array,0,layer,w);
      }
 
 }
 
-void constuct_layers(int *clayer,int *a,int *b,int *layer,int j,int w,int h)
+void constuct_layers(int *a,int *b,int *layer,int j,int w)
 {
-    create_array(clayer,a,b,layer,j,w+1,h);
+    create_array(a,b,layer,j,w+1);
 }
  int findabarry(int *a,int *b,int w)
 {
@@ -270,19 +214,18 @@ int main()
    // printf("%d    \n",layer_size);
     int layer[layer_size][(w+1)];
      memset( layer, sizeof( layer ), 0 );
-     int clayer[h][w+1];
-    constuct_layers(&clayer,&a,&b,&layer,j,w,h);
+    constuct_layers(&a,&b,&layer,j,w);
     int k;
 
 
    for(k=0;k<layer_size;k++)
    {
-       //print_layer(&layer,(w+1),k);
+       print_layer(&layer,(w+1),k);
      }
   // print_layer(&layer,(w+1),2);
-  
-  //combine(&clayer,&layer,(w+1),h,0);
-  printf("%d \n",p);
+  int clayer[h][w+1];
+  combine(&clayer,&layer,(w+1),h,0);
+ // printf("%d \n",p);
 
 
     return 0;
