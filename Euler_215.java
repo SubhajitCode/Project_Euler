@@ -8,65 +8,22 @@ class Euler_215
 {
     static int g=0,p=0;
    
-static void combine(int clayer[][],List<int[]> layer,int w,int h,int level)
-{
-    
-    int i,j;
-    int c=0;
-    if(level==h)
-    {
-        /*
-        for(i=0;i<h;i++)
-        {
-            print_array(clayer[i]);
-
-        }
-        */
-
-        c = checkcrack(clayer,w,h);
-        if(c==1)
-        {
-           // printf("\n--------------------cracked wall found --------------- \n");
-        }
-        else
-        {
-           // printf("\n------no crackk------ \n");
-            p++;
-        }
-        return;
-    }
-    for(j=0;j<g;j++)
-    {
-        if(level>=1)
-        {
-            if(clayer[level-1]==layer.get(j))
-            {
-                continue;
-            }
-        }
-
-        clayer[level]=layer.get(j);
-        combine(clayer,layer,w,h,level+1);      
-    }
-    
-}
 
 
-static int checkcrack(int clayer[][],int w,int h)
+
+static int checkcrack(int clayer[],int clayer2[],int w)
 {
     int i,j;
     
     for(i=1;i<(w-1);i++)
     {
         int wall =0;
-        for(j=0;j<(h-1);j++)
+         wall = clayer[i] + clayer2[i];
+        if(wall > 1)
         {
-            wall = clayer[j][i] + clayer[j+1][i];
-            if(wall > 1)
-            {
                 return 1;
-            }
         }
+        
         // printf("wall = %d \n",wall);
 
         
@@ -149,15 +106,49 @@ static int checkcrack(int clayer[][],int w,int h)
         }
 
     }
+static void combine(int clayer[][],List<int[]> layer,int w,int h,int level2)
+{
+    
+    int i,j;
+    if(level2==h)
+    {
+        
+        for(i=0;i<h;i++)
+        {
+            print_array(clayer[i]);
+
+        }
+        p++;
+        return;
+    }
+    for(j=0;j<g;j++)
+    {
+        if(level2>=1)
+        {
+            int c2=checkcrack(clayer[level2-1],layer.get(j),w);
+            if(c2==1)
+            {
+                continue;
+            }
+        }
+
+        clayer[level2]=layer.get(j);
+        combine(clayer,layer,w,h,level2+1);      
+    }
+    
+}
     static void permute(int blocks[],int count[],int size,int array[],int level,List<int[]> layer,int w)
     {
         if (level == size) 
             {
                           
                 create_layer_from_array(layer,array,w,size);
+                
                 // int  [] array2= new int [size];
                 //array2 = Arrays.copyOf(array, size);
                 //layer.add(array2);
+                
+              
                 g++;
                 return;
             }
